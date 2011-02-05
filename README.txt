@@ -2,7 +2,7 @@ PTViewerNG
 - Plugin-Free Open-GL Panorama Viewer
 
 
-Original author: Helmut Dersch   der@fh-furtwangen.de 2010
+Original author: Helmut Dersch, januari 2010
  
 http://webuser.hs-furtwangen.de/~dersch/PTViewerNG/PTViewerNG.html
 
