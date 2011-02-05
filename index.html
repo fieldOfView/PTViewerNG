@@ -1,0 +1,87 @@
+<html>
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<TITLE> PTViewerNG </TITLE>
+<style type="text/css">
+h1 { color:#6363A5; font-family:Arial,sans-serif; }
+h2 { color:#434385; font-family:Arial,sans-serif; }
+p  { color:#000000; font-family:Arial,sans-serif; }
+body { color:#000000; font-family:Arial,sans-serif; }
+a:link { color:#333385; text-decoration:underline; }
+</style>
+
+
+
+<script type="text/javascript" src="js/sylvester.js"></script>
+<script type="text/javascript" src="js/glUtils.js"></script>
+<script type="text/javascript" src="js/shader.js"></script>
+<script type="text/javascript" src="js/ptviewerng.js"></script>
+
+
+</head>
+
+
+<table border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td style="background-color: rgb(150, 200, 215);" width="20" valign="top">
+</td>
+<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="top">
+
+
+<body  bgcolor="#CCCCB0" >
+
+<table>
+<tr>
+<td width="500">
+<h1>PTViewerNG</h1>
+<p><b> Prof. Dr. H. Dersch - HFU Furtwangen </b>
+<br>
+January 29, 2010
+</p>
+<hr>
+
+<h2>PTViewerNG - Plugin-Free Open-GL Panorama Viewer</h2>
+<p>
+PTViewerNG is based on <a href = "http://khronos.org/webgl/wiki/Main_Page">WebGL</a>.
+To view the demo download and install one of the compatible browsers. I have tested
+the viewer with Firefox (the nightly built pre-alpha version
+is required). Make sure to enable WebGL as described 
+<a href ="http://khronos.org/webgl/wiki/Implementations/Firefox">here</a>.
+</p>
+<p>
+<a href="sv.html">High resolution example</a>
+courtesy Erik Leeman.
+<br>Caution: 6 MB, no download feedback.
+</p>
+<p>
+Copyright 2010&nbsp; Helmut Dersch
+<br>
+der@fh-furtwangen.de
+</p>
+</td>
+<td>
+<br>
+<br>
+<br>
+	<canvas id="ptviewerng-canvas" style="border: none;" width="500" height="400"></canvas>
+	<script type="text/javascript">
+		var viewer = new PTViewerNG( document.getElementById("ptviewerng-canvas"), "faces/p" );
+	</script>
+	<br>
+	<b>Accelerate left-right-up-down using arrow keys, or Numpad 4,6,8,2.
+<br>
+Zoom in and out using +/- keys.
+<br>
+Stop using 'c' or space or Numpad 5.
+
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+
+</body>
+</html>
