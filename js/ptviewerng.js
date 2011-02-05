@@ -379,14 +379,23 @@ function PTViewerNG( pt_canvas, panorama ) {
 	}
 
 
-  	var fov  = 45;
+  	var fov  = 70;
   	var xRot = 0;
   	var yRot = 0;
   	var zRot = 0;
   	function drawScene() {
     	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
+		if(isFullscreen) {
+			if(canvas.width != document.body.clientWidth || canvas.height != document.body.clientHeight) {
+				canvas.width = document.body.clientWidth;
+				canvas.height = document.body.clientHeight;
+			}
+		}
+		
 		var aspect = canvas.width / canvas.height;
+		gl.viewport(0, 0, canvas.width, canvas.height);
+		
     	perspective(fov, aspect, 0.1, 100.0);
     	loadIdentity();
 
@@ -481,6 +490,7 @@ function PTViewerNG( pt_canvas, panorama ) {
 	var zoomInKeys 		= [	16, 65, 107, 61, 187 ];
 	var zoomOutKeys 	= [	17, 90, 109, 189 ];
 	var stopKeys 		= [	67,32,101 ];
+	var fullscreenKeys  = [ 70 ];
 	
 	function pressedOneOf( keylist ){
 		for(var i=0; i< keylist.length; i++)
@@ -489,6 +499,8 @@ function PTViewerNG( pt_canvas, panorama ) {
 		return false;
 	}
 
+	var fullscreenKeyDown;
+	
 	function handleKeys() {
 		if( pressedOneOf( panLeftKeys ) )
 			panLeft();
@@ -504,6 +516,14 @@ function PTViewerNG( pt_canvas, panorama ) {
 			zoomOut();
 		if( pressedOneOf( stopKeys ) )
 			stop();
+			
+		if( pressedOneOf( fullscreenKeys ) ) {
+			if(!fullscreenKeyDown) {
+				fullscreenKeyDown = true;
+				toggleFullscreen();
+			}		
+		} else 
+			fullscreenKeyDown = false;
   	}
 
 
@@ -590,4 +610,38 @@ function PTViewerNG( pt_canvas, panorama ) {
 		return false;
   	}
 
+	
+	this.toggleFullscreen = toggleFullscreen;
+	var isFullscreen = false;
+	var canvasStylesStore = Object();
+	
+	function toggleFullscreen() {
+		if(!isFullscreen) {
+			canvasStylesStore = Object( {
+				position: ( canvas.style.position != "" ) ? canvas.style.position : "static",
+				top: ( canvas.style.top != "" ) ? canvas.style.top : "0px",
+				left: ( canvas.style.left != "" ) ? canvas.style.left : "0px",
+				width: ( canvas.style.width != "" ) ? canvas.style.width : "auto",
+				height: ( canvas.style.height != "" ) ? canvas.style.height : "auto",
+				canvaswidth: canvas.width, 
+				canvasheight: canvas.height,
+			} );
+			
+			canvas.style.position = "fixed";
+			canvas.style.top = "0px";
+			canvas.style.left = "0px";
+			canvas.style.width = "100%";
+			canvas.style.height = "100%";
+		} else {
+			canvas.style.position = canvasStylesStore.position;
+			canvas.style.top = canvasStylesStore.top;
+			canvas.style.left = canvasStylesStore.left;
+			canvas.style.width = canvasStylesStore.width;
+			canvas.style.height = canvasStylesStore.height;
+			canvas.width = canvasStylesStore.canvaswidth;
+			canvas.height = canvasStylesStore.canvasheight;
+			
+		}
+		isFullscreen = !isFullscreen;
+	}
  }
