@@ -575,12 +575,12 @@ function PTViewerNG( pt_canvas, panorama ) {
 
   	function handleKeyDown(event) {
     	currentlyPressedKeys[event.keyCode] = true;
-		return false
+		return true;
   	}
 
   	function handleKeyUp(event) {
     	currentlyPressedKeys[event.keyCode] = false;
-		return false
+		return true;
   	}
 
   
