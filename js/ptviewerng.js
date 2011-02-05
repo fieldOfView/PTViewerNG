@@ -478,8 +478,8 @@ function PTViewerNG( pt_canvas, panorama ) {
 	var panRightKeys 	= [	39, 102 ];
 	var panUpKeys 		= [	38, 104 ];
 	var panDownKeys 	= [	40, 98 ];
-	var zoomInKeys 		= [	107, 61, 187 ];
-	var zoomOutKeys 	= [	109 ];
+	var zoomInKeys 		= [	16, 65, 107, 61, 187 ];
+	var zoomOutKeys 	= [	17, 90, 109, 189 ];
 	var stopKeys 		= [	67,32,101 ];
 	
 	function pressedOneOf( keylist ){
