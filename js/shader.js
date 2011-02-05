@@ -1,9 +1,12 @@
 
 document.writeln('<'+'script id="shader-fs" type="x-shader/x-fragment"'+'>');
+document.writeln('  #ifdef GL_ES');
+document.writeln('  precision highp float;');
+document.writeln('  #endif');
 document.writeln('  varying vec2 vTextureCoord;');
 document.writeln('  uniform sampler2D uSampler;');
 document.writeln('  void main(void) {');
-document.writeln('    gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, 1.0 - vTextureCoord.t));');
+document.writeln('    gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));');
 document.writeln('  }');
 document.writeln('<'+'/script'+'>');
 

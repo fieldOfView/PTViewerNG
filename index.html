@@ -2,7 +2,7 @@
 
 <head>
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
-<TITLE> PTViewerNG </TITLE>
+<title> PTViewerNG </title>
 <style type="text/css">
 h1 { color:#6363A5; font-family:Arial,sans-serif; }
 h2 { color:#434385; font-family:Arial,sans-serif; }
@@ -20,17 +20,17 @@ a:link { color:#333385; text-decoration:underline; }
 
 
 </head>
-
-
+<body bgcolor="#ccccb0">
 <table border="0" cellpadding="0" cellspacing="0">
-<tr>
-<td style="background-color: rgb(150, 200, 215);" width="20" valign="top">
+<tbody><tr>
+<td style="background-color: rgb(150, 200, 215);" valign="top" 
+width="20">
 </td>
-<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td>&nbsp;</td>
 <td valign="top">
 
 
-<body  bgcolor="#CCCCB0" >
+
 
 <table>
 <tr>
@@ -38,26 +38,21 @@ a:link { color:#333385; text-decoration:underline; }
 <h1>PTViewerNG</h1>
 <p><b> Prof. Dr. H. Dersch - HFU Furtwangen </b>
 <br>
-January 29, 2010
+January 29, 2010<br>
+Updated Januari 10, 2011 by Aldo Hoeben
 </p>
 <hr>
 
 <h2>PTViewerNG - Plugin-Free Open-GL Panorama Viewer</h2>
 <p>
-PTViewerNG is based on <a href = "http://khronos.org/webgl/wiki/Main_Page">WebGL</a>.
-To view the demo download and install one of the compatible browsers. I have tested
-the viewer with Firefox (the nightly built pre-alpha version
-is required). Make sure to enable WebGL as described 
-<a href ="http://khronos.org/webgl/wiki/Implementations/Firefox">here</a>.
-</p>
+PTViewerNG is based on <a href="http://khronos.org/webgl/wiki/Main_Page">WebGL</a>. It was created by 
+<a href="http://webuser.hs-furtwangen.de/~dersch/PTViewerNG/PTViewerNG.html">Helmut 
+Dersch</a>.
+To view the demo download and install one of the compatible browsers. The viewer has been tested with the current batch of WebGL enabled browsers, including Chrome 8 and Firefox 4b8.</p>
+<p>Panorama by <a href="http://dmmdh.nl">Wim Koorneef</a></p>
 <p>
-<a href="sv.html">High resolution example</a>
-courtesy Erik Leeman.
-<br>Caution: 6 MB, no download feedback.
-</p>
-<p>
-Copyright 2010&nbsp; Helmut Dersch
-<br>
+  Copyright 2010&nbsp; Helmut Dersch
+  <br>
 der@fh-furtwangen.de
 </p>
 </td>
@@ -65,9 +60,10 @@ der@fh-furtwangen.de
 <br>
 <br>
 <br>
-	<canvas id="ptviewerng-canvas" style="border: none;" width="500" height="400"></canvas>
+	<canvas id="ptviewerng-canvas" style="border: medium none;" width="500"
+ height="400"></canvas>
 	<script type="text/javascript">
-		var viewer = new PTViewerNG( document.getElementById("ptviewerng-canvas"), "faces/p" );
+		var viewer = new PTViewerNG( document.getElementById("ptviewerng-canvas"), "faces/www.dmmdh.nl_001" );
 	</script>
 	<br>
 	<b>Accelerate left-right-up-down using arrow keys, or Numpad 4,6,8,2.

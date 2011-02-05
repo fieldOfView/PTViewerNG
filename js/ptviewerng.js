@@ -129,17 +129,26 @@ function PTViewerNG( pt_canvas, panorama ) {
 
   	function handleLoadedTexture(image, texture) {
     	gl.bindTexture(gl.TEXTURE_2D, texture);
-    	gl.texImage2D(gl.TEXTURE_2D, 0, image);
+		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
 /*
+		// nearest neighour sampling -> aliasing
     	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
     	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 
-    	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-*/
+		// linear sampling with mipmapping -> nicest, but only works for power-of-two textures
     	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
 		gl.generateMipmap(gl.TEXTURE_2D);
+*/
+		// linear sampling -> also allowed for non-power-of-two textures
+    	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+		
+		// edge clamping is required for non-power-of-two textures
+		// bonus: no edge artefacts between faces
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);		
 
     	gl.bindTexture(gl.TEXTURE_2D, null);
   	}
@@ -230,8 +239,8 @@ function PTViewerNG( pt_canvas, panorama ) {
 
 
   	function setMatrixUniforms() {
-    	gl.uniformMatrix4fv(shader.pMatrixUniform, false, new WebGLFloatArray(pMatrix.flatten()));
-    	gl.uniformMatrix4fv(shader.mvMatrixUniform, false, new WebGLFloatArray(mvMatrix.flatten()));
+    	gl.uniformMatrix4fv(shader.pMatrixUniform, false, new Float32Array(pMatrix.flatten()));
+    	gl.uniformMatrix4fv(shader.mvMatrixUniform, false, new Float32Array(mvMatrix.flatten()));
   	}
 
 
@@ -242,45 +251,45 @@ function PTViewerNG( pt_canvas, panorama ) {
 	function initVertexPositions( gl ){
 		var cubeVertexPositionBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
-		var f = 0.998;
+
 		vertices = [
 		// Front face
-       -1.0, -1.0,  f,
-        1.0, -1.0,  f,
-        1.0,  1.0,  f,
-       -1.0,  1.0,  f,
+       -1.0, -1.0,  1.0,
+        1.0, -1.0,  1.0,
+        1.0,  1.0,  1.0,
+       -1.0,  1.0,  1.0,
 
        // Back face
-       -1.0, -1.0, -f,
-       -1.0,  1.0, -f,
-        1.0,  1.0, -f,
-        1.0, -1.0, -f,
+       -1.0, -1.0, -1.0,
+       -1.0,  1.0, -1.0,
+        1.0,  1.0, -1.0,
+        1.0, -1.0, -1.0,
 
        // Top face
-       -1.0,  f, -1.0,
-       -1.0,  f,  1.0,
-        1.0,  f,  1.0,
-        1.0,  f, -1.0,
+       -1.0,  1.0, -1.0,
+       -1.0,  1.0,  1.0,
+        1.0,  1.0,  1.0,
+        1.0,  1.0, -1.0,
 
        // Bottom face
-       -1.0, -f, -1.0,
-        1.0, -f, -1.0,
-        1.0, -f,  1.0,
-       -1.0, -f,  1.0,
+       -1.0, -1.0, -1.0,
+        1.0, -1.0, -1.0,
+        1.0, -1.0,  1.0,
+       -1.0, -1.0,  1.0,
 
        // Right face
-        f, -1.0, -1.0,
-        f,  1.0, -1.0,
-        f,  1.0,  1.0,
-        f, -1.0,  1.0,
+        1.0, -1.0, -1.0,
+        1.0,  1.0, -1.0,
+        1.0,  1.0,  1.0,
+        1.0, -1.0,  1.0,
 
        // Left face
-       -f, -1.0, -1.0,
-       -f, -1.0,  1.0,
-       -f,  1.0,  1.0,
-       -f,  1.0, -1.0,
+       -1.0, -1.0, -1.0,
+       -1.0, -1.0,  1.0,
+       -1.0,  1.0,  1.0,
+       -1.0,  1.0, -1.0,
 		];
-		gl.bufferData(gl.ARRAY_BUFFER, new WebGLFloatArray(vertices), gl.STATIC_DRAW);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
 		cubeVertexPositionBuffer.itemSize = 3;
 		cubeVertexPositionBuffer.numItems = 24;
 		return cubeVertexPositionBuffer;
@@ -326,7 +335,7 @@ function PTViewerNG( pt_canvas, panorama ) {
         0.0, 1.0,
         1.0, 1.0,
     	];
-		gl.bufferData(gl.ARRAY_BUFFER, new WebGLFloatArray(textureCoords), gl.STATIC_DRAW);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
 		cubeVertexTextureCoordBuffer.itemSize = 2;
 		cubeVertexTextureCoordBuffer.numItems = 24;
 		return cubeVertexTextureCoordBuffer;
@@ -344,27 +353,27 @@ function PTViewerNG( pt_canvas, panorama ) {
 
     	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeIndexBuffer[0]);
     	var cubeVertexIndices = [ 0, 1, 2, 0, 2, 3 ]; // Front face
-    	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new WebGLUnsignedShortArray(cubeVertexIndices), gl.STATIC_DRAW);
+    	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
 
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeIndexBuffer[1]);    
     	cubeVertexIndices = [ 16, 17, 18, 16, 18, 19 ]; // Right face
-    	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new WebGLUnsignedShortArray(cubeVertexIndices), gl.STATIC_DRAW);
+    	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
 
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeIndexBuffer[2]);
     	cubeVertexIndices = [ 20, 21, 22, 20, 22, 23]; // Left face
-    	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new WebGLUnsignedShortArray(cubeVertexIndices), gl.STATIC_DRAW);
+    	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
 
     	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeIndexBuffer[3]);
 		cubeVertexIndices = [ 4, 5, 6, 4, 6, 7];// Back face
-    	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new WebGLUnsignedShortArray(cubeVertexIndices), gl.STATIC_DRAW);
+    	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
 
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeIndexBuffer[4]);    
     	cubeVertexIndices = [ 8, 9, 10, 8, 10, 11 ];// Top face
-    	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new WebGLUnsignedShortArray(cubeVertexIndices), gl.STATIC_DRAW);
+    	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
 
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeIndexBuffer[5]);   
     	cubeVertexIndices = [ 12, 13, 14,   12, 14, 15]; // Bottom face
- 	    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new WebGLUnsignedShortArray(cubeVertexIndices), gl.STATIC_DRAW);
+ 	    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
  	    
  	    return cubeIndexBuffer;
 	}
